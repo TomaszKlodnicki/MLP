@@ -1,0 +1,5 @@
+﻿  main.cpp
+C:\Users\pshad\source\repos\MLP\MLP\main.cpp(28,21): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+C:\Users\pshad\source\repos\MLP\MLP\main.cpp(58,39): warning C4305: "inicjowanie": obcięcie z "double" do "float"
+C:\Users\pshad\source\repos\MLP\MLP\main.cpp(79,27): warning C4305: "argument": obcięcie z "double" do "float"
+  MLP.vcxproj -> C:\Users\pshad\source\repos\MLP\Debug\MLP.exe
