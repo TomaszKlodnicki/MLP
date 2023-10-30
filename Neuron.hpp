@@ -20,6 +20,7 @@ public:
 	void addToValue(float _value);
 	float getSigmaAcumulate();
 	void clearNeuron();
+	void clearSigmaAcumulate();
 	void addToSigmaAcumulate(float sigma);
 	void setActivationFunc(float (*activation)(float), float (*dActivation)(float));
 };

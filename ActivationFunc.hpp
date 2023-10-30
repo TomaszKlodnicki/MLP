@@ -30,6 +30,8 @@ float multiClassClassificationCostFunction(float* predicions, float* values, int
 
 float simpleError(float prediction, float value);
 float dSimpleError(float prediction, float value);
+float binaryError(float prediction, float value);
+float dBinaryError(float predicion, float value);
 
 #endif // !ERROR_FUNC
 

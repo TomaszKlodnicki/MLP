@@ -13,15 +13,19 @@ private:
 	int outputSize;
 	int hiddenSize;
 	float bias;
+	bool includeBias;
 	int howManyConnections;
 	int howManyNeurons;
 	int howManyConnectionsLayers;
+	int howManyBiasConnections;
 	int* connectionLayerSize;
 	float learningRate;
+	Neuron biasOne;
 	Neuron* inputLayer;
 	Neuron* outputLayer;
 	Neuron* hiddenLayers;
 	Connection* connections;
+	Connection* biasConnections;
 	void resetNeuronValues();
 	float (*errorFunc)(float, float);
 	float (*dErrorFucn)(float, float);
@@ -33,6 +37,7 @@ public:
 	int getHowManyConnections();
 	int getHowManyNeurons();
 	void printScheme();
+	void setIncludeBias(bool _includeBias);
 	void getOutput(float* output);
 	void setLearningRate(float _learningRate);
 	void setActivationFuncForLayer(int layer, float (*activation)(float), float (*diffActivation)(float));

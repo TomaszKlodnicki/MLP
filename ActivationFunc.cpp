@@ -78,3 +78,9 @@ float simpleError(float prediction, float value) {
 float dSimpleError(float prediction, float value) {
 	return (prediction - value) / 2;
 }
+float binaryError(float prediction, float value) {
+	return  -value * log(prediction) - (1 - value) * log(1 - prediction);
+}
+float dBinaryError(float predicion, float value) {
+	return -(value - predicion) / (1 - predicion) / predicion;
+}
