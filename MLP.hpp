@@ -8,6 +8,7 @@
 class MLP {
 private:
 	int* hiddenLayerSize;
+	int* allLayersSize;
 	int howManyHiddenLayers;
 	int inputSize;
 	int outputSize;
@@ -19,6 +20,7 @@ private:
 	int howManyConnectionsLayers;
 	int howManyBiasConnections;
 	int* connectionLayerSize;
+	int* biasConnectionLayerSize;
 	float learningRate;
 	Neuron biasOne;
 	Neuron* inputLayer;
@@ -26,6 +28,8 @@ private:
 	Neuron* hiddenLayers;
 	Connection* connections;
 	Connection* biasConnections;
+	Connection** firstConnectionInLayer;
+	Connection** firstBiasConnectionInLayer;
 	void resetNeuronValues();
 	float (*errorFunc)(float, float);
 	float (*dErrorFucn)(float, float);

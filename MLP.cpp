@@ -12,8 +12,8 @@ MLP::MLP(int _inputSize, int _howManyHiddenLayers, int* _hiddenLayerSize, int _o
 	learningRate = 0.1;
 	//errorFunc = &simpleError;
 	//dErrorFucn = &dSimpleError;
-	errorFunc = &binaryError;
-	dErrorFucn = &dBinaryError;
+	errorFunc = &simpleError;
+	dErrorFucn = &dSimpleError;
 	howManyConnectionsLayers = howManyHiddenLayers + 1;
 	srand(time(NULL));
 	bias = float(rand() % 1000) / 1000;
@@ -24,6 +24,11 @@ MLP::MLP(int _inputSize, int _howManyHiddenLayers, int* _hiddenLayerSize, int _o
 	connectionLayerSize[0] = inputSize * hiddenLayerSize[0];
 	for (int i = 1; i < howManyConnectionsLayers - 1; i++) connectionLayerSize[i] = hiddenLayerSize[i - 1] * hiddenLayerSize[i];
 	connectionLayerSize[howManyConnectionsLayers - 1] = hiddenLayerSize[howManyHiddenLayers - 1] * outputSize;
+
+	allLayersSize = (int*)malloc(sizeof(howManyHiddenLayers + 2));
+	allLayersSize[0] = inputSize;
+	allLayersSize[howManyHiddenLayers + 1] = outputSize;
+	for (int i = 0; i < howManyHiddenLayers; i++) allLayersSize[i + 1] = hiddenLayerSize[i];
 
 	//---CREATE NEURONS---
 
@@ -59,6 +64,13 @@ MLP::MLP(int _inputSize, int _howManyHiddenLayers, int* _hiddenLayerSize, int _o
 		for (int j = 0; j < outputSize; j++)
 			new (&connections[tempConnectionCounter + i * outputSize + j]) Connection(&hiddenLayers[tempNeuronInHiddenLayer[0]+i], &outputLayer[j]);
 
+	tempConnectionCounter = 0;
+	firstConnectionInLayer = (Connection**)malloc(sizeof(Connection*) * howManyConnections);
+	for (int i = 0; i < howManyConnectionsLayers; i++) {
+		firstConnectionInLayer[i] = &(connections[tempConnectionCounter]);
+		tempConnectionCounter += connectionLayerSize[i];
+	}
+
 	//---BIAS CONNECTIONS---
 
 	howManyBiasConnections = hiddenSize + outputSize;
@@ -67,6 +79,17 @@ MLP::MLP(int _inputSize, int _howManyHiddenLayers, int* _hiddenLayerSize, int _o
 	biasConnections = (Connection*)malloc(sizeof(Connection) * (howManyBiasConnections));
 	for (int i = 0; i < hiddenSize; i++) new (&biasConnections[i]) Connection(&biasOne, &hiddenLayers[i]);
 	for (int i = 0; i < outputSize; i++) new (&biasConnections[hiddenSize + i]) Connection(&biasOne, &outputLayer[i]);
+	
+	tempConnectionCounter = 0;
+	firstBiasConnectionInLayer = (Connection**)malloc(sizeof(Connection*) * howManyConnectionsLayers);
+	for (int i = 0; i < howManyConnectionsLayers-1; i++) {
+		firstBiasConnectionInLayer[i] = &(biasConnections[tempConnectionCounter]);
+		tempConnectionCounter += hiddenLayerSize[i];
+	}
+	firstBiasConnectionInLayer[howManyConnectionsLayers-1] = &(biasConnections[tempConnectionCounter]);
+
+	biasConnectionLayerSize = (int*)malloc(sizeof(int) * howManyConnectionsLayers);
+	for (int i = 0; i < howManyConnectionsLayers; i++) biasConnectionLayerSize[i] = allLayersSize[i + 1];
 }
 
 MLP::~MLP() {
@@ -136,10 +159,11 @@ bool MLP::bakcPropagation(float* _inputTab, float* values) {
 	getOutput(outputTab);
 	for (int i = 0; i < outputSize; i++)
 		outputLayer[i].addToSigmaAcumulate(dErrorFucn(outputTab[i], values[i]));
-
+	free(outputTab);
 	if (!includeBias)
 	for (int i = howManyConnections - 1; i >= 0; i--)
 		connections[i].calcSigmaAndActualizeWeights(learningRate);
+	
 	else {
 		Connection* tempConnectnionPtr = &connections[howManyConnections - 1];
 		Connection* tempBiasConnectionPtr = &biasConnections[howManyBiasConnections - 1];
@@ -156,6 +180,12 @@ bool MLP::bakcPropagation(float* _inputTab, float* values) {
 			if(layer-1 >= 0)biasSize = hiddenLayerSize[layer-1];
 		}
 	}
+	/*else {
+		for (int layer = howManyConnectionsLayers - 1; layer >= 0; layer--) {
+			for (int i = 0; i < connectionLayerSize[layer]; i++) firstConnectionInLayer[layer][i].calcSigmaAndActualizeWeights(learningRate);
+			for (int i = 0; i < biasConnectionLayerSize[layer]; i++) firstBiasConnectionInLayer[layer][i].calcSigmaAndActualizeWeights(learningRate);
+		}
+	}*/
 
 	return 1;
 }

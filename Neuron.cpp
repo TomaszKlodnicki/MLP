@@ -3,10 +3,10 @@
 Neuron::Neuron(){
 	value = 0;
 	sigmaAcumulate = 0;
-	//activationFunc = &tanH;
-	//dActivationFunc = &dTanH;
-	activationFunc = &relu;
-	dActivationFunc = &dRelu;
+	activationFunc = &tanH;
+	dActivationFunc = &dTanH;
+	//activationFunc = &relu;
+	//dActivationFunc = &dRelu;
 }
 Neuron::~Neuron(){}
 void Neuron::setValue(float _value) { value = _value; }

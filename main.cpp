@@ -71,12 +71,12 @@ int main() {
 
 
 
-	int testSize[4] = { 5, 10, 15, 20 };
+	int testSize[4] = { 5, 15, 15 , 10};
 	MLP test = MLP(4, 4, testSize, 1);
 
 	test.setActivationFuncForLayer(-1, sigmoid, dSigmoid);
-	//test.setActivationFuncForLayer(0, linear, dLinear);
-	test.setLearningRate(0.05);
+	test.setActivationFuncForLayer(0, linear, dLinear);
+	test.setLearningRate(0.01);
 
 	int trueTable[2][2] = { { 0,0 },{ 0,0 } };
 
@@ -91,7 +91,7 @@ int main() {
 
 	cout << "predict 0 | " << trueTable[0][0] << " |" << trueTable[0][1] << "\n";
 	cout << "predict 1 | " << trueTable[1][0] << " |" << trueTable[1][1] << "\n";
-	cout << "Acuracy = " << float(trueTable[0][0] + trueTable[1][1]) / float(trueTable[0][0] + trueTable[0][1] + trueTable[1][0] + trueTable[1][1]) << "\n";
+	cout << "Acuracy = " << float(trueTable[0][0] + trueTable[1][1]) / float(trueTable[0][0] + trueTable[0][1] + trueTable[1][0] + trueTable[1][1]) << "\n\n\n";
 	trueTable[0][0] = 0;
 	trueTable[1][0] = 0;
 	trueTable[0][1] = 0;
