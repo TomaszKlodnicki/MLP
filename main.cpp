@@ -71,12 +71,13 @@ int main() {
 
 
 
-	int testSize[4] = { 5, 15, 15 , 10};
-	MLP test = MLP(4, 4, testSize, 1);
+	//int testSize[10] = { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5};
+	int testSize[2] = { 50, 20};
+	MLP test = MLP(4, 2, testSize, 1);
 
 	test.setActivationFuncForLayer(-1, sigmoid, dSigmoid);
 	test.setActivationFuncForLayer(0, linear, dLinear);
-	test.setLearningRate(0.01);
+	test.setLearningRate(0.05);
 
 	int trueTable[2][2] = { { 0,0 },{ 0,0 } };
 
@@ -99,7 +100,7 @@ int main() {
 
 
 
-	for (int j = 0; j < 50; j++) {
+	for (int j = 0; j < 500; j++) {
 		for (int i = 0; i < trein.rows; i++) {
 			float out = float(trein.clas[i]);
 			test.bakcPropagation(trein.data[i], &out);
@@ -112,7 +113,7 @@ int main() {
 			if (predictions[0] >= 0.5) trueTable[1][int(trein.clas[i])]++;
 			else trueTable[0][int(trein.clas[i])]++;
 		}
-
+		cout << "\n---ITERATION " << j << "---\n";
 		cout << "predict 0 | " << trueTable[0][0] << " |" << trueTable[0][1] << "\n";
 		cout << "predict 1 | " << trueTable[1][0] << " |" << trueTable[1][1] << "\n";
 		cout << "Acuracy = " << float(trueTable[0][0] + trueTable[1][1]) / float(trueTable[0][0] + trueTable[0][1] + trueTable[1][0] + trueTable[1][1]) << "\n";
@@ -121,6 +122,9 @@ int main() {
 		trueTable[0][1] = 0;
 		trueTable[1][1] = 0;
 	}
+
+	neuralNetwork.clearMemory();
+	test.clearMemory();
 
 	return 1;
 }

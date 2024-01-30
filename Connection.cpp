@@ -18,12 +18,13 @@ Connection::Connection(Neuron* _start, Neuron* _end, float _weight) {
 
 Connection::~Connection() {}
 float Connection::getSigma() { return sigma; }
-void Connection::actualizeWeight(float learningRate) { weight -= learningRate * sigma; }
+void Connection::actualizeWeight(float learningRate) { weight -= learningRate * start->getActivatedValue() * sigma; }
 void Connection::executePush() { end->addToValue(weight * start->getActivatedValue()); }
 
 void Connection::calcSigma(float differential) {
-	sigma = differential * start->getActivatedValue() * end->getDiffActivatedValue();
-	start->addToSigmaAcumulate(sigma);
+	//sigma =  start->getActivatedValue() * end->getDiffActivatedValue() * differential;
+	//start->addToSigmaAcumulate(sigma);
+	sigma =  end->getDiffActivatedValue() * differential;
 }
 void Connection::calcSigma() {
 	calcSigma(end->getSigmaAcumulate());
@@ -31,4 +32,5 @@ void Connection::calcSigma() {
 void Connection::calcSigmaAndActualizeWeights(float learningRate) {
 	calcSigma();
 	actualizeWeight(learningRate);
+	start->addToSigmaAcumulate(sigma*weight);
 }

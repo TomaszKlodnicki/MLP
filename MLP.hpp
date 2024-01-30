@@ -45,6 +45,7 @@ public:
 	void getOutput(float* output);
 	void setLearningRate(float _learningRate);
 	void setActivationFuncForLayer(int layer, float (*activation)(float), float (*diffActivation)(float));
+	void clearMemory();
 };
 
 #endif // !MPL_CLASS
